@@ -1,33 +1,19 @@
 {
   "name": "h90-player",
   "version": "1.0.0",
-  "description": "H90 Player — Video Player for H90 App",
-  "main": "index.html",
+  "description": "H90 Player - مشغل الفيديو",
+  "main": "player.js",
   "scripts": {
-    "cap:init": "npx cap init",
-    "cap:add": "npx cap add android",
-    "cap:sync": "npx cap sync",
-    "cap:open": "npx cap open android",
-    "cap:build": "npx cap sync android && cd android && ./gradlew assembleDebug",
-    "cap:build-release": "npx cap sync android && cd android && ./gradlew assembleRelease"
+    "build": "echo 'No build needed'"
   },
-  "keywords": [
-    "h90",
-    "player",
-    "video",
-    "iptv",
-    "exoplayer",
-    "capacitor"
-  ],
-  "author": "Hussain Al Hussain",
+  "author": "H90",
   "license": "MIT",
   "dependencies": {
     "@capacitor/core": "^6.0.0",
     "@capacitor/android": "^6.0.0",
     "@capacitor/app": "^6.0.0",
     "@capacitor/splash-screen": "^6.0.0",
-    "@capacitor/status-bar": "^6.0.0",
-    "@capacitor-community/video-player": "^6.0.0"
+    "@capacitor/status-bar": "^6.0.0"
   },
   "devDependencies": {
     "@capacitor/cli": "^6.0.0"
