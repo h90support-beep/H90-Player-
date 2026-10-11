@@ -17,7 +17,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # ✅ 2. تثبيت Node.js
+      # ✅ 2. تثبيت Node.js 20
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -54,7 +54,7 @@ jobs:
       - name: Build Debug APK
         run: |
           cd android
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --stacktrace
 
       # ✅ 10. رفع APK كـ Artifact
       - name: Upload Debug APK
