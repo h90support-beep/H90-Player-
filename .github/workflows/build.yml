@@ -1,0 +1,64 @@
+name: Build H90 Player APK
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      # ✅ 1. تنزيل الكود
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ✅ 2. تثبيت Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # ✅ 3. تثبيت Java 17
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # ✅ 4. تثبيت Android SDK
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      # ✅ 5. تثبيت الحزم
+      - name: Install dependencies
+        run: npm install
+
+      # ✅ 6. إنشاء مشروع Android
+      - name: Add Android platform
+        run: npx cap add android
+
+      # ✅ 7. مزامنة Capacitor
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+      # ✅ 8. منح صلاحيات Gradle
+      - name: Grant execute permission for gradlew
+        run: chmod +x android/gradlew
+
+      # ✅ 9. بناء APK (Debug)
+      - name: Build Debug APK
+        run: |
+          cd android
+          ./gradlew assembleDebug
+
+      # ✅ 10. رفع APK كـ Artifact
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: H90-Player-Debug-APK
+          path: android/app/build/outputs/apk/debug/*.apk
