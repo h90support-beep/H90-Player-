@@ -2,63 +2,53 @@ name: Build H90 Player APK
 
 on:
   push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
-  build-android:
-    name: Build Android APK
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      # ✅ 1. تنزيل الكود
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      # ✅ 2. تثبيت Node.js 20
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      # ✅ 3. تثبيت Java 17
-      - name: Setup Java JDK
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # ✅ 4. تثبيت Android SDK
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Prepare www folder
+        run: |
+          mkdir -p www
+          cp index.html www/
+          cp player.css www/
+          cp player.js www/
+          cp manifest.json www/
+          cp H90player.png www/
 
-      # ✅ 5. تثبيت الحزم
-      - name: Install dependencies
-        run: npm install
+      - name: Install Deps
+        run: npm install --legacy-peer-deps
 
-      # ✅ 6. إنشاء مشروع Android
-      - name: Add Android platform
+      - name: Add Android
         run: npx cap add android
 
-      # ✅ 7. مزامنة Capacitor
-      - name: Sync Capacitor
+      - name: Sync
         run: npx cap sync android
 
-      # ✅ 8. منح صلاحيات Gradle
-      - name: Grant execute permission for gradlew
-        run: chmod +x android/gradlew
-
-      # ✅ 9. بناء APK (Debug)
-      - name: Build Debug APK
+      - name: Build
+        working-directory: android
         run: |
-          cd android
-          ./gradlew assembleDebug --stacktrace
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
 
-      # ✅ 10. رفع APK كـ Artifact
-      - name: Upload Debug APK
+      - name: Upload
         uses: actions/upload-artifact@v4
         with:
-          name: H90-Player-Debug-APK
-          path: android/app/build/outputs/apk/debug/*.apk
+          name: H90-Player-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
