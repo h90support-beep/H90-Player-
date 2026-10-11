@@ -1,7 +1,7 @@
 {
   "appId": "com.h90.player",
   "appName": "H90 Player",
-  "webDir": ".",
+  "webDir": "www",
   "bundledWebRuntime": false,
   "android": {
     "allowMixedContent": true,
